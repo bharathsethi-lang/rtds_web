@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050b10" />
+  <title>DriverGuard — AI Driver Monitoring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <header class="topbar">
+    <button class="brand" data-page="drive" aria-label="DriverGuard home">
+      <span class="brand-mark">◉</span>
+      <span>DRIVER<span>GUARD</span></span>
+    </button>
+
+    <nav class="nav">
+      <button class="nav-link active" data-page="drive">01 / DRIVE</button>
+      <button class="nav-link" data-page="system">02 / SYSTEM</button>
+      <button class="nav-link" data-page="contact">03 / CONTACT</button>
+    </nav>
+
+    <div class="system-pill">
+      <span class="pulse"></span>
+      <span id="headerStatus">STANDBY</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE 1 -->
+    <section class="page page-drive active" id="drive">
+      <div class="cockpit">
+        <div class="windshield-glow"></div>
+        <div class="road-lines"></div>
+
+        <div class="windshield-frame frame-left"></div>
+        <div class="windshield-frame frame-right"></div>
+        <div class="dashboard-edge"></div>
+
+        <div class="hud hud-camera">
+          <div class="hud-label">
+            <span>DRIVER CAMERA</span>
+            <span class="rec"><i></i> LIVE</span>
+          </div>
+          <div class="camera-wrap">
+            <video id="camera" autoplay muted playsinline></video>
+            <div class="camera-placeholder" id="cameraPlaceholder">
+              <div class="camera-icon">◌</div>
+              <strong>CAMERA OFF</strong>
+              <small>Start simulation to activate</small>
+            </div>
+            <div class="scanline"></div>
+            <div class="face-corners"></div>
+          </div>
+          <div class="camera-metrics">
+            <span>EAR <b id="earValue">0.31</b></span>
+            <span>HEAD <b id="headValue">+3.2°</b></span>
+          </div>
+        </div>
+
+        <div class="hud hud-events">
+          <div class="hud-title">LIVE ANALYSIS</div>
+          <div class="event-row good" id="eventFace">✓ FACE DETECTED</div>
+          <div class="event-row good" id="eventSpeed">✓ SPEED WITHIN LIMIT</div>
+          <div class="event-row good" id="eventAttention">✓ DRIVER FOCUSED</div>
+        </div>
+
+        <div class="speed-hud">
+          <div class="speed-ring">
+            <div class="ring-ticks"></div>
+            <div class="speed-number" id="speedValue">00</div>
+            <div class="speed-unit">KM/H</div>
+            <div class="speed-limit">LIMIT <b>80</b></div>
+          </div>
+        </div>
+
+        <div class="score-hud">
+          <div class="mini-label">DRIVER SCORE</div>
+          <div class="score-number" id="scoreValue">100</div>
+          <div class="score-bar"><span id="scoreBar"></span></div>
+          <div class="score-caption" id="scoreCaption">EXCELLENT</div>
+        </div>
+
+        <div class="status-hud" id="statusHud">
+          <div class="status-dot"></div>
+          <div>
+            <div class="status-main" id="statusValue">SYSTEM READY</div>
+            <div class="status-sub" id="statusSub">Start the simulation to begin monitoring</div>
+          </div>
+        </div>
+
+        <div class="center-reticle">
+          <span></span>
+          <small>ROAD VIEW</small>
+        </div>
+
+        <div class="start-overlay" id="startOverlay">
+          <div class="start-content">
+            <div class="eyebrow">AI DRIVER MONITORING SYSTEM</div>
+            <h1>DRIVE<br><span>SMARTER.</span></h1>
+            <p>Real-time driver behaviour analysis through vision, vehicle simulation and intelligent risk scoring.</p>
+            <button class="primary-btn" id="startBtn">
+              <span class="btn-icon">▶</span>
+              START SIMULATION
+            </button>
+            <div class="start-note">Camera permission is required for live driver view.</div>
+          </div>
+        </div>
+
+        <div class="alert-banner" id="alertBanner">
+          <span class="alert-icon">!</span>
+          <div>
+            <strong id="alertTitle">DRIVER ALERT</strong>
+            <span id="alertText">Attention required</span>
+          </div>
+          <button id="dismissAlert">×</button>
+        </div>
+
+        <div class="simulation-controls" id="simulationControls">
+          <button id="pauseBtn">Ⅱ PAUSE</button>
+          <button id="demoBtn">⚡ DEMO EVENT</button>
+          <button id="stopBtn">■ END</button>
+        </div>
+
+        <div class="telemetry">
+          <span>ACC <b id="accValue">+0.0</b> m/s²</span>
+          <span>TURN <b id="turnValue">0.0°</b></span>
+          <span>FPS <b id="fpsValue">--</b></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2 -->
+    <section class="page system-page" id="system">
+      <div class="page-inner">
+        <div class="page-heading">
+          <div class="eyebrow">02 / SYSTEM</div>
+          <h2>HOW DRIVERGUARD<br><span>THINKS.</span></h2>
+          <p>The system combines driver vision with simulated vehicle telemetry to identify risky behaviour and react in real time.</p>
+        </div>
+
+        <div class="pipeline">
+          <div class="pipeline-step"><span>01</span><b>CAMERA</b><small>Live driver feed</small></div>
+          <div class="pipeline-line"></div>
+          <div class="pipeline-step"><span>02</span><b>VISION</b><small>Face & head analysis</small></div>
+          <div class="pipeline-line"></div>
+          <div class="pipeline-step"><span>03</span><b>TELEMETRY</b><small>Speed & vehicle data</small></div>
+          <div class="pipeline-line"></div>
+          <div class="pipeline-step"><span>04</span><b>EVENTS</b><small>Risk detection</small></div>
+          <div class="pipeline-line"></div>
+          <div class="pipeline-step"><span>05</span><b>DECISION</b><small>Status & score</small></div>
+        </div>
+
+        <div class="rule-grid">
+          <article class="rule-card">
+            <div class="card-icon">◉</div>
+            <div class="card-number">01</div>
+            <h3>DROWSINESS</h3>
+            <p>Eye Aspect Ratio (EAR) is used to estimate whether the driver's eyes remain closed for a sustained period.</p>
+            <div class="rule-value"><span>EAR THRESHOLD</span><b>0.25</b></div>
+          </article>
+
+          <article class="rule-card">
+            <div class="card-icon">⌁</div>
+            <div class="card-number">02</div>
+            <h3>DISTRACTION</h3>
+            <p>Head pose is estimated from facial landmarks. Large head rotation can indicate the driver is not focused ahead.</p>
+            <div class="rule-value"><span>HEAD ANGLE</span><b>25°</b></div>
+          </article>
+
+          <article class="rule-card">
+            <div class="card-icon">↗</div>
+            <div class="card-number">03</div>
+            <h3>DRIVING EVENTS</h3>
+            <p>The simulator evaluates speed, acceleration and turn angle to identify aggressive or rash driving behaviour.</p>
+            <div class="rule-value"><span>SPEED LIMIT</span><b>80 KM/H</b></div>
+          </article>
+
+          <article class="rule-card">
+            <div class="card-icon">◇</div>
+            <div class="card-number">04</div>
+            <h3>RISK SCORE</h3>
+            <p>The driver starts with a score of 100. Detected events reduce the score while safe frames allow recovery.</p>
+            <div class="rule-value"><span>START SCORE</span><b>100 / 100</b></div>
+          </article>
+        </div>
+
+        <div class="status-legend">
+          <span><i class="legend safe"></i> SAFE</span>
+          <span><i class="legend warn"></i> RASH</span>
+          <span><i class="legend orange"></i> AGGRESSIVE</span>
+          <span><i class="legend danger"></i> DISTRACTED / DROWSY</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3 -->
+    <section class="page contact-page" id="contact">
+      <div class="contact-grid">
+        <div class="contact-copy">
+          <div class="eyebrow">03 / CONTACT</div>
+          <h2>LET'S BUILD<br><span>SAFER ROADS.</span></h2>
+          <p>DriverGuard is an AI-powered driver behaviour monitoring concept combining computer vision and simulated vehicle telemetry.</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-avatar">DG</div>
+          <div class="eyebrow">PROJECT / DEVELOPER</div>
+          <h3>YOUR NAME</h3>
+          <p>AI / MACHINE LEARNING</p>
+
+          <div class="contact-links">
+            <a href="#" onclick="return false;"><span>↗</span> GITHUB <b>ADD LINK</b></a>
+            <a href="#" onclick="return false;"><span>↗</span> LINKEDIN <b>ADD LINK</b></a>
+            <a href="#" onclick="return false;"><span>✉</span> EMAIL <b>ADD EMAIL</b></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-footer">
+        <span>DRIVERGUARD</span>
+        <span>VISION • TELEMETRY • SAFETY</span>
+        <span>© 2026</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <audio id="alarmAudio" src="assets/alarm.wav" preload="auto"></audio>
+</body>
+</html>
